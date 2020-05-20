@@ -1,8 +1,3 @@
-.model tiny
-.code 
-
-org 100h
-
 ; =============================================================================
 ; INPUT:  di - pointer to memory block to fill with value
 ;         al - value to use as filler (byte)
