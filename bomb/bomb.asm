@@ -4,7 +4,6 @@
         org 100h
 
 start:
-
 level1:
         mov dx, offset greetings
         call print_string
@@ -131,13 +130,61 @@ level3:
         call strcmp
 
         cmp ax, 1
-        je ezwin
+        je level4
 
         jmp babah
 
+level4:
+        mov dx, offset timetodie
+        call print_string
+
+        mov dx, offset newline
+        call print_string
+
+        ; get string from keyboard
+        mov dx, offset buffer
+        mov ah, 0ah ; print to buffer
+        int 21h
+        
+        ; get string length
+        mov si, offset buffer ; pointer to buffer structure
+        inc si ; pointer to buffer length
+        xor cx, cx
+        mov cl, byte ptr [si] ; put string length in cx
+
+        ; put $ (EOF) in the end of input string
+        inc si ; pointer to buffer
+        add si, cx ; go to end of buffer
+        xor ax, ax
+        mov al, '$'
+        mov byte ptr [si], al ; put $ symbol
+
+        mov dx, offset newline
+        call print_string
+
+        mov di, offset buffer
+        add di, 2
+
+        call getbin
+
+        push dx
+
+        mov ah, 2 ; функция BIOS для получения текущего времени
+        int 1ah
+
+        xor ax, ax
+        mov al, ch ; часы
+
+        pop dx
+
+        cmp ax, dx
+        je ezwin
+
+        jmp babah 
+
 ezwin:
         mov dx, offset turnedoff
-        call print_string  
+        call print_string
 
         ; exit program
         mov ah, 00h ; exit
@@ -224,6 +271,29 @@ xorstring_return:
 
 xorstring endp
 
+getbin proc
+        xor bx, bx
+        xor dx, dx
+getbin_loop:
+        mov bl, byte ptr [di]
+        cmp bl, '$'
+        je getbin_return
+
+        sub bx, 48
+
+        shl dx, 1
+        add dx, bx
+
+        inc di
+
+        jmp getbin_loop
+
+getbin_return:
+        ret
+
+
+getbin endp
+
 .data
         newline db 0ah, '$'
 
@@ -243,5 +313,8 @@ xorstring endp
 
         xorordies db 'Seems you need some secret key for this password:', '$'
         password3 db 'Not really a password', '$'
+
+        timetodie db 'TIME to die. Or not? Do you have password?', '$'
+        password4 db 'Get out of here', '$'
 
 end start

@@ -7,6 +7,7 @@
 1. `Plaintask`
 2. `Et tu, Brute?`
 3. `Xorни или умри`
+4. `TIME to die`
 
 ## Как играть
 
