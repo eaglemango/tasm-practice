@@ -7,3 +7,13 @@
 1. `Plaintask`
 2. `Et tu, Brute?`
 3. `Xorни или умри`
+
+## Как играть
+
+Вам нужен `DOS`:
+
+```
+> tasm /la bomb.asm
+> tlink /t bomb.obj
+> bomb.com
+```
